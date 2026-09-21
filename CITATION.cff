@@ -1,31 +1,42 @@
 cff-version: 1.2.0
 message: "If you reuse this survey, please cite it as below."
-title: "Pre-course survey: Data Science for openwashdata"
+title: "Pre-course survey: Agents for Scientists"
 abstract: >-
-  A KoboToolbox XLSForm pre-course survey for the Data Science for
-  openwashdata (DS4OWD) course. It collects participant background,
-  education and employment, barriers to participation, technical
-  experience (programming, Git, IDEs, LLMs) and learning goals. Published
-  as a reusable resource so it can be adapted for other courses.
+  A surveydown pre-course survey for the Agents for Scientists workshop. It
+  collects a GitHub username, technical experience (programming, Git, IDEs,
+  command line, data formats), current use of AI tools and goals for the
+  workshop. Adapted from the pre-course survey of the Data Science for
+  openwashdata course and published as a reusable resource so it can be
+  adapted for other workshops.
 type: dataset
 authors:
   - family-names: "Schöbitz"
     given-names: "Lars"
     orcid: "https://orcid.org/0000-0003-2196-5015"
-  - family-names: "Walder"
-    given-names: "Colin"
-    orcid: "https://orcid.org/0009-0006-0969-1954"
 keywords:
-  - KoboToolbox
-  - XLSForm
+  - surveydown
   - survey
-  - openwashdata
-  - data science
+  - AI agents
+  - research software
+  - digital research skills
   - open educational resources
 license: CC-BY-4.0
-version: "20250712"
-date-released: "2025-07-12"
-# After your first GitHub release, Zenodo mints a DOI. Add it here, e.g.:
-# doi: "10.5281/zenodo.XXXXXXX"
-repository-code: "https://github.com/ds4owd-dev/kobo-precourse-survey"
-url: "https://github.com/ds4owd-dev/kobo-precourse-survey"
+version: "20260921"
+date-released: "2026-09-21"
+repository-code: "https://github.com/agentsforsci-dev/pre-course-survey"
+url: "https://github.com/agentsforsci-dev/pre-course-survey"
+references:
+  - type: dataset
+    title: "Pre-course survey: Data Science for openwashdata"
+    authors:
+      - family-names: "Schöbitz"
+        given-names: "Lars"
+        orcid: "https://orcid.org/0000-0003-2196-5015"
+      - family-names: "Walder"
+        given-names: "Colin"
+        orcid: "https://orcid.org/0009-0006-0969-1954"
+    license: CC-BY-4.0
+    version: "20250712"
+    date-released: "2025-07-12"
+    repository-code: "https://github.com/ds4owd-dev/pre-course-survey"
+    url: "https://github.com/ds4owd-dev/pre-course-survey"
