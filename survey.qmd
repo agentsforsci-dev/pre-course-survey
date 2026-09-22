@@ -4,8 +4,11 @@
 # and listed in _survey/settings.yml after the first render.
 
 theme-settings:
-  theme: default
+  # litera is the Bootswatch theme of the workshop website. custom.scss adds
+  # the website's font and palette.
+  theme: [litera, custom.scss]
   barposition: top
+  barcolor: "#0F4C81"
   footer-left: "Made with [surveydown](https://surveydown.org), licensed [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/)"
   footer-right: "[Source Code](https://github.com/agentsforsci-dev/pre-course-survey)"
 
@@ -18,7 +21,9 @@ survey-settings:
   auto-scroll: false
   rate-survey: false
   system-language: en
-  highlight-unanswered: true
+  # Every question is required, so tinting all unanswered questions would
+  # colour the whole page. The asterisks and the warning on Next remain.
+  highlight-unanswered: false
   highlight-color: blue
   # false: no browser string and no IP address are stored with a response
   capture-metadata: false

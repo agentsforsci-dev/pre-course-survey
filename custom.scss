@@ -1,0 +1,58 @@
+/*-- scss:defaults --*/
+
+// Matches the workshop website (agentsforsci-ghe/website, theme.scss and
+// _brand.yml): the Global Health Engineering palette and the Atkinson
+// Hyperlegible typeface, here in its 2025 successor Atkinson Hyperlegible Next.
+
+@import 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@200..800&display=swap';
+
+$font-family-sans-serif: "Atkinson Hyperlegible Next", sans-serif;
+$font-family-base: $font-family-sans-serif;
+// litera sets paragraph text in a serif face. Question labels are paragraphs.
+$font-family-serif: $font-family-sans-serif;
+
+$ghe-blue: #0F4C81;
+$ghe-orange: #ED6D37;
+$ghe-gray: #5c5751;
+$ghe-light: #F5F5F5;
+
+$body-color: #1e1e1e;
+$body-bg: #f4f4f4;
+$primary: $ghe-blue;
+$secondary: $ghe-gray;
+$link-color: $ghe-blue;
+
+/*-- scss:rules --*/
+
+// surveydown sets its own page background in a CSS variable and loads its
+// stylesheet after this one, so the Bootstrap $body-bg above needs repeating
+// with a more specific selector.
+html:root {
+  --body-background-color: #{$body-bg};
+}
+
+h1, h2, h3 {
+  color: $ghe-blue;
+}
+
+// Question boxes: white on the paper background. The selectors carry one
+// extra class so that they win over surveydown's later stylesheet.
+.question-container .form-group {
+  background-color: #ffffff;
+  border-color: #dddddd;
+}
+
+// Matrix rows keep the white box; the sticky header stays light grey.
+.matrix-question-container .matrix-question tr:nth-child(even),
+.matrix-question-container .matrix-question tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.matrix-question-container .matrix-question th {
+  background-color: $ghe-light;
+}
+
+// Footer text in the GHE grey.
+.footer {
+  color: $ghe-gray;
+}
