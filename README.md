@@ -16,7 +16,7 @@ The survey takes about 5 minutes and has 14 questions on five pages:
 - GitHub username (the only identifier, no name and no email address)
 - Technical experience (programming, Git and GitHub use since the previous
   workshop, IDEs, command line, data formats, narrative documents)
-- Current use of AI tools (voluntary)
+- Current use of AI tools
 - Goals for the workshop
 - Consent
 

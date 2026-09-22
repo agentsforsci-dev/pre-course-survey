@@ -10,9 +10,9 @@ theme-settings:
   footer-right: "[Source Code](https://github.com/agentsforsci-dev/pre-course-survey)"
 
 survey-settings:
-  # "preview" saves responses to a local preview_data.csv file.
-  # Change to "database" once credentials are configured (see app.R).
-  mode: preview
+  # "database" stores responses in the PostgreSQL database configured in .env.
+  # Use "preview" for local testing, responses then go to preview_data.csv.
+  mode: database
   show-previous: true
   use-cookies: true
   auto-scroll: false
@@ -22,19 +22,29 @@ survey-settings:
   highlight-color: blue
   # false: no browser string and no IP address are stored with a response
   capture-metadata: false
+  # Every question is required. They are listed one by one rather than with
+  # all-required, because all-required marks each matrix row by its own id
+  # while sd_show_if() hides the matrix by its parent id, so a hidden matrix
+  # would still block the Next button. Listing the parent id (prog, ai_data,
+  # ai_text) makes every row required and skips the matrix while hidden. The
+  # two "Other" text fields are likewise only enforced while visible.
   all-required: false
-  # Listing a matrix question id (prog) makes every row of that matrix
-  # required. The questions on the AI tools page are voluntary.
   required:
     - github_username
     - prog
     - git_since_workshop
     - github_since_workshop
     - ide_used
+    - ide_used_other
     - cli_usage
     - data_format
     - narrative_docs
+    - ai_tools
+    - ai_tools_other
+    - ai_data
+    - ai_text
     - learning_goals
+    - agents_curiosity
     - consent
 ---
 
@@ -203,29 +213,42 @@ sd_question(
 
 --- ai
 
-## Current use of AI tools (answers are voluntary)
+## Current use of AI tools
 
 By AI tools we mean applications built on large language models (LLMs), for example ChatGPT, Claude or Gemini, and AI features inside other programs such as Microsoft Copilot or DeepL.
 
-The answers are voluntary and help me fit the workshop to how you work today.
+The answers help me fit the workshop to how you work today.
 
 ```{r}
 sd_question(
   type   = "mc_multiple",
   id     = "ai_tools",
   label  = "Which AI tools have you already used? (multiple answers possible)",
+  # Grouped by provider: chat product first, then the coding agent.
   option = c(
     "ChatGPT (OpenAI)" = "chatgpt",
-    "Microsoft Copilot (in Windows, Edge, Teams or Microsoft 365)" = "copilot_365",
-    "Gemini (Google)" = "gemini",
+    "Codex (OpenAI)" = "codex",
     "Claude (Anthropic)" = "claude",
-    "Perplexity" = "perplexity",
-    "DeepL (translation, DeepL Write)" = "deepl",
-    "AI literature tools (e.g. Elicit, Consensus, scite, Research Rabbit)" = "ai_literature",
-    "NotebookLM (Google)" = "notebooklm",
-    "GitHub Copilot (in VS Code, RStudio or Positron)" = "copilot_ide",
     "Claude Code (Anthropic)" = "claude_code",
+    "Gemini (Google)" = "gemini",
+    "Gemini CLI (Google)" = "gemini_cli",
+    "NotebookLM (Google)" = "notebooklm",
+    "Microsoft Copilot (in Windows, Edge, Teams or Microsoft 365)" = "copilot_365",
+    "GitHub Copilot (in VS Code, RStudio or Positron)" = "copilot_ide",
+    "Grok (xAI)" = "grok",
+    "Le Chat (Mistral)" = "le_chat",
+    "DeepSeek" = "deepseek",
+    "Perplexity" = "perplexity",
     "Cursor" = "cursor",
+    "Windsurf" = "windsurf",
+    "Positron Assistant" = "positron_assistant",
+    "Local models (e.g. Ollama, LM Studio)" = "local_models",
+    "DeepL (translation, DeepL Write)" = "deepl",
+    "Writing assistants (e.g. Grammarly, Writefull, Overleaf AI)" = "writing_assistants",
+    "Apple Intelligence (writing tools in macOS)" = "apple_intelligence",
+    "Image generators (e.g. DALL-E, Midjourney, Adobe Firefly)" = "image_generators",
+    "Meeting transcription (e.g. Teams transcription, Otter)" = "transcription",
+    "AI literature tools (e.g. Elicit, Consensus, scite, Research Rabbit)" = "ai_literature",
     "Other" = "other",
     "None of the above" = "none"
   )

@@ -24,7 +24,20 @@ library(surveydown)
 # On a hosted runtime without a .env file, sd_db_connect() reads the same
 # SD_* values from environment variables.
 
-db <- sd_db_connect()
+# Require TLS for every database connection. libpq reads PGSSLMODE, and the
+# default ("prefer") would fall back to an unencrypted connection.
+Sys.setenv(PGSSLMODE = "require")
+
+# Supabase: connect through the session pooler (port 5432 on the pooler host).
+# The transaction pooler (port 6543) fails with RPostgres, which sends each
+# query as a prepared statement in two steps. In transaction mode the second
+# step can reach a different backend ("unnamed prepared statement does not
+# exist"). With four parallel clients about half of all queries failed on
+# port 6543 and none failed on port 5432.
+#
+# gssencmode = "disable" skips the GSSAPI encryption negotiation. The Supabase
+# pooler does not offer it, so the attempt only adds connection time.
+db <- sd_db_connect(gssencmode = "disable")
 
 # UI setup --------------------------------------------------------------------
 
