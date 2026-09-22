@@ -13,10 +13,11 @@ KoboToolbox XLSForm is kept in `forms/` as the source.
 
 ## What the survey collects
 
-The survey takes about 5 minutes and has 14 questions on five pages. Every
+The survey takes about 10 minutes and has 16 questions on five pages. Every
 question is required.
 
-- GitHub username (the only identifier, no name and no email address)
+- GitHub username (the only identifier, no name and no email address),
+  operating system and reference manager
 - Technical experience (programming, Git and GitHub use since the previous
   workshop, IDEs, command line, data formats, narrative documents)
 - Current use of AI tools

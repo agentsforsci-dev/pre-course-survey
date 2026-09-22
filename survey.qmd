@@ -36,6 +36,9 @@ survey-settings:
   all-required: false
   required:
     - github_username
+    - os
+    - reference_manager
+    - reference_manager_other
     - prog
     - git_since_workshop
     - github_since_workshop
@@ -81,7 +84,7 @@ ai_freq_legend <- "<br>*Occasionally = when needed (e.g. once a week). Regularly
 
 # `r workshop_name`: pre-course survey
 
-This survey is Step 3 of the pre-course work for the `r workshop_name` workshop on `r workshop_date`. It takes about 5 minutes. Please complete it by `r survey_due`.
+This survey is Step 3 of the pre-course work for the `r workshop_name` workshop on `r workshop_date`. It takes about 10 minutes. Please complete it by `r survey_due`.
 
 Your answers help me fit the day to your experience.
 
@@ -99,6 +102,37 @@ sd_question(
     "GitHub username<br>*The username you used in the ", prior_workshop,
     " workshop, without the @.*"
   )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "os",
+  label  = "Which operating system is on the laptop you bring to the workshop?",
+  option = c(
+    "macOS"   = "macos",
+    "Windows" = "windows",
+    "Linux"   = "linux"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "reference_manager",
+  label  = "Which reference manager do you use?",
+  option = c(
+    "Zotero"       = "zotero",
+    "Mendeley"     = "mendeley",
+    "EndNote"      = "endnote",
+    "Paperpile"    = "paperpile",
+    "Another tool" = "other",
+    "None"         = "none"
+  )
+)
+
+sd_question(
+  type  = "text",
+  id    = "reference_manager_other",
+  label = "Other reference manager (please specify):"
 )
 ```
 

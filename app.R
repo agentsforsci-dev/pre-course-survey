@@ -48,7 +48,8 @@ ui <- sd_ui()
 server <- function(input, output, session) {
   # Conditional display logic
   sd_show_if(
-    # Show the specification fields if "Other" is ticked
+    # Show the specification fields if "Other" or "Another tool" is chosen
+    sd_value("reference_manager") == "other" ~ "reference_manager_other",
     "other" %in% sd_value("ide_used") ~ "ide_used_other",
     "other" %in% sd_value("ai_tools") ~ "ai_tools_other",
 
