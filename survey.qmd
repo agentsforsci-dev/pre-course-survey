@@ -1,0 +1,370 @@
+---
+# Survey configuration.
+# All available settings are documented at https://surveydown.org
+# and listed in _survey/settings.yml after the first render.
+
+theme-settings:
+  # litera is the Bootswatch theme of the workshop website. custom.scss adds
+  # the website's font and palette.
+  theme: [litera, custom.scss]
+  barposition: top
+  barcolor: "#0F4C81"
+  footer-left: "Made with [surveydown](https://surveydown.org), licensed [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/)"
+  footer-right: "[Source Code](https://github.com/agentsforsci-dev/pre-course-survey)"
+
+survey-settings:
+  # "database" stores responses in the PostgreSQL database configured in .env.
+  # Use "preview" for local testing, responses then go to preview_data.csv.
+  mode: database
+  show-previous: true
+  use-cookies: true
+  auto-scroll: false
+  rate-survey: false
+  system-language: en
+  # Every question is required, so tinting all unanswered questions would
+  # colour the whole page. The asterisks and the warning on Next remain.
+  highlight-unanswered: false
+  highlight-color: blue
+  # false: no browser string and no IP address are stored with a response
+  capture-metadata: false
+  # Every question is required. They are listed one by one rather than with
+  # all-required, because all-required marks each matrix row by its own id
+  # while sd_show_if() hides the matrix by its parent id, so a hidden matrix
+  # would still block the Next button. Listing the parent id (prog, ai_data,
+  # ai_text) makes every row required and skips the matrix while hidden. The
+  # two "Other" text fields are likewise only enforced while visible.
+  all-required: false
+  required:
+    - github_username
+    - os
+    - reference_manager
+    - reference_manager_other
+    - prog
+    - git_since_workshop
+    - github_since_workshop
+    - ide_used
+    - ide_used_other
+    - cli_usage
+    - data_format
+    - narrative_docs
+    - ai_tools
+    - ai_tools_other
+    - ai_data
+    - ai_text
+    - learning_goals
+    - agents_curiosity
+    - consent
+---
+
+```{r}
+library(surveydown)
+
+# Cohort values. Edit these for the next iteration of the workshop.
+workshop_name   <- "Agents for Scientists"
+workshop_date   <- "Tuesday, 29 September 2026"
+survey_due      <- "Friday, 25 September 2026"
+website_url     <- "https://agentsforsci-ghe.github.io/website/"
+pre_work_url    <- "https://agentsforsci-ghe.github.io/website/pre-work/"
+prior_workshop  <- "Git for Scientists"
+prior_month     <- "July"
+
+# Frequency scale shared by the two AI tools grids. Stored values match the
+# llm_freq list of the DS4OWD XLSForm. The column labels are short so that the
+# grid stays readable on narrow screens. The legend carries the full wording.
+opts_ai_freq <- c(
+  "Never"        = "never",
+  "Occasionally" = "occasional",
+  "Regularly"    = "regular",
+  "Constantly"   = "rely"
+)
+ai_freq_legend <- "<br>*Occasionally = when needed (e.g. once a week). Regularly = to work more efficiently (e.g. once a day). Constantly = I rely on it (e.g. several times a day).*"
+```
+
+--- welcome
+
+# `r workshop_name`: pre-course survey
+
+This survey is Step 3 of the pre-course work for the `r workshop_name` workshop on `r workshop_date`. It takes about 10 minutes. Please complete it by `r survey_due`.
+
+Your answers help me fit the day to your experience.
+
+Workshop website: [`r website_url`](`r website_url`)
+
+--- about
+
+## About you
+
+```{r}
+sd_question(
+  type  = "text",
+  id    = "github_username",
+  label = paste0(
+    "GitHub username<br>*The username you used in the ", prior_workshop,
+    " workshop, without the @.*"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "os",
+  label  = "Which operating system is on the laptop you bring to the workshop?",
+  option = c(
+    "macOS"   = "macos",
+    "Windows" = "windows",
+    "Linux"   = "linux"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "reference_manager",
+  label  = "Which reference manager do you use?",
+  option = c(
+    "Zotero"       = "zotero",
+    "Mendeley"     = "mendeley",
+    "EndNote"      = "endnote",
+    "Paperpile"    = "paperpile",
+    "Another tool" = "other",
+    "None"         = "none"
+  )
+)
+
+sd_question(
+  type  = "text",
+  id    = "reference_manager_other",
+  label = "Other reference manager (please specify):"
+)
+```
+
+--- experience
+
+## Technical experience
+
+```{r}
+sd_question(
+  type   = "matrix",
+  id     = "prog",
+  label  = "How much programming experience do you have?",
+  row    = c(
+    "Programming in general" = "general",
+    "Programming in R"       = "r",
+    "Programming in Python"  = "python"
+  ),
+  option = c(
+    "I have none"                                   = "none",
+    "I have written a few lines"                    = "few_lines",
+    "I have written programs for my own use"        = "own_use",
+    "I have written and maintained larger software" = "maintained"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "git_since_workshop",
+  label  = paste0(
+    "Which of these best describes your use of Git since the ",
+    prior_workshop, " workshop in ", prior_month, "?"
+  ),
+  option = c(
+    "I have not used Git since the workshop" = "not_since",
+    "Used occasionally for basic tasks"      = "occasional",
+    "Used regularly for my own projects"     = "regular",
+    "Used extensively for collaborative work" = "extensive"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "github_since_workshop",
+  label  = paste0(
+    "Which of these best describes your use of GitHub since the ",
+    prior_workshop, " workshop in ", prior_month, "?"
+  ),
+  option = c(
+    "I have not used GitHub since the workshop"    = "not_since",
+    "Occasionally viewed or downloaded repositories" = "viewed",
+    "Regularly managed my own repositories"        = "managed",
+    "Extensively used for collaborative work"      = "collab"
+  )
+)
+
+sd_question(
+  type   = "mc_multiple",
+  id     = "ide_used",
+  label  = "Which of the following Integrated Development Environments (IDEs) have you used? (multiple answers possible)",
+  option = c(
+    "RStudio"                                  = "rstudio",
+    "Positron"                                 = "positron",
+    "Visual Studio Code (VS Code)"             = "vscode",
+    "Jupyter (JupyterLab or Jupyter Notebook)" = "jupyter",
+    "PyCharm"                                  = "pycharm",
+    "MATLAB IDE"                               = "matlab_ide",
+    "Cursor"                                   = "cursor",
+    "Other"                                    = "other",
+    "None of the above"                        = "none"
+  )
+)
+
+sd_question(
+  type  = "text",
+  id    = "ide_used_other",
+  label = "Other IDE (please specify):"
+)
+
+sd_question(
+  type   = "mc",
+  id     = "cli_usage",
+  label  = "Which of these best describes your current use of the command-line interface (CLI)?<br>*On Mac, the default CLI app is Terminal. On Windows, it is Windows Terminal, which can run Command Prompt, PowerShell and Bash.*",
+  option = c(
+    "I have never used the command-line interface." = "never",
+    "I have used the CLI occasionally for basic tasks (e.g. navigating folders, running single commands)." = "occasional",
+    "I use the CLI regularly for my own projects, including scripting and automating tasks." = "regular",
+    "I use the CLI extensively for advanced workflows (e.g. SSH, environment management, custom scripts)." = "extensive"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "data_format",
+  label  = "In which format do you store the majority of your data?",
+  option = c(
+    "Physical notebooks on paper"                     = "paper",
+    "Spreadsheet-based format (Excel, Google Sheets)" = "spreadsheet",
+    "Machine-readable files (CSV, JSON)"              = "machine_readable",
+    "Relational / non-relational database"            = "database",
+    "Don't know"                                      = "dont_know",
+    "No data to store"                                = "no_data"
+  )
+)
+
+sd_question(
+  type   = "mc",
+  id     = "narrative_docs",
+  label  = "Which of these best describes how you write narrative documents that include text and analysis?",
+  option = c(
+    "Word processors (e.g. MS Word, Google Docs) without code" = "word_no_code",
+    "Word processors (e.g. MS Word, Google Docs) with copy/paste code output" = "word_copy_paste",
+    "LaTeX with copy/paste code output" = "latex_copy_paste",
+    "Literate programming notebooks (e.g. R Markdown, Quarto, Jupyter)" = "literate_prog"
+  )
+)
+```
+
+--- ai
+
+## Current use of AI tools
+
+By AI tools we mean applications built on large language models (LLMs), for example ChatGPT, Claude or Gemini, and AI features inside other programs such as Microsoft Copilot or DeepL.
+
+The answers help me fit the workshop to how you work today.
+
+```{r}
+sd_question(
+  type   = "mc_multiple",
+  id     = "ai_tools",
+  label  = "Which AI tools have you already used? (multiple answers possible)",
+  # Grouped by provider: chat product first, then the coding agent.
+  option = c(
+    "ChatGPT (OpenAI)" = "chatgpt",
+    "Codex (OpenAI)" = "codex",
+    "Claude (Anthropic)" = "claude",
+    "Claude Code (Anthropic)" = "claude_code",
+    "Gemini (Google)" = "gemini",
+    "Gemini CLI (Google)" = "gemini_cli",
+    "NotebookLM (Google)" = "notebooklm",
+    "Microsoft Copilot (in Windows, Edge, Teams or Microsoft 365)" = "copilot_365",
+    "GitHub Copilot (in VS Code, RStudio or Positron)" = "copilot_ide",
+    "Grok (xAI)" = "grok",
+    "Le Chat (Mistral)" = "le_chat",
+    "DeepSeek" = "deepseek",
+    "Perplexity" = "perplexity",
+    "Cursor" = "cursor",
+    "Windsurf" = "windsurf",
+    "Positron Assistant" = "positron_assistant",
+    "Local models (e.g. Ollama, LM Studio)" = "local_models",
+    "DeepL (translation, DeepL Write)" = "deepl",
+    "Writing assistants (e.g. Grammarly, Writefull, Overleaf AI)" = "writing_assistants",
+    "Apple Intelligence (writing tools in macOS)" = "apple_intelligence",
+    "Image generators (e.g. DALL-E, Midjourney, Adobe Firefly)" = "image_generators",
+    "Meeting transcription (e.g. Teams transcription, Otter)" = "transcription",
+    "AI literature tools (e.g. Elicit, Consensus, scite, Research Rabbit)" = "ai_literature",
+    "Other" = "other",
+    "None of the above" = "none"
+  )
+)
+
+sd_question(
+  type  = "text",
+  id    = "ai_tools_other",
+  label = "Other AI tool (please specify):"
+)
+
+sd_question(
+  type   = "matrix",
+  id     = "ai_data",
+  label  = paste0("How often do you use AI tools for working with data?", ai_freq_legend),
+  row    = c(
+    "Agentic automation, the tool carries out the steps itself (e.g. \"Read all Excel files in this folder, clean the site names and write a report.\")" = "automation",
+    "Coding help without agents, you copy the code by hand (e.g. \"Write me an R function that counts the samples per site.\")" = "coding",
+    "Data analysis / extraction (e.g. \"Extract author, year and sample size from these papers into a table.\")" = "data_analysis",
+    "Learning / having things explained (e.g. \"Explain the difference between a median and a mean.\")" = "learning",
+    "Answering questions (e.g. \"Where do I find the WHO/UNICEF JMP data on sanitation coverage by country?\")" = "qa"
+  ),
+  option = opts_ai_freq
+)
+
+sd_question(
+  type   = "matrix",
+  id     = "ai_text",
+  label  = paste0("How often do you use AI tools for text and communication?", ai_freq_legend),
+  row    = c(
+    "Summarising (e.g. \"Summarise this research paper in 200 words.\")" = "summarization",
+    "Translating (e.g. \"Translate this email from English to German.\")" = "translation",
+    "Writing text, the tool writes based on my ideas and prompts (e.g. blog posts, manuscripts)" = "writing",
+    "Creating content (e.g. slides for a conference talk or a figure for a poster)" = "content_gen",
+    "Chatbots for information and support (e.g. IT support: \"How do I set up VPN access on my laptop?\")" = "conversation"
+  ),
+  option = opts_ai_freq
+)
+```
+
+--- goals
+
+## Your goals for the workshop
+
+```{r}
+sd_question(
+  type  = "textarea",
+  id    = "learning_goals",
+  label = "What do you want to know or be able to do that you don't know or can't do right now?"
+)
+
+sd_question(
+  type  = "textarea",
+  id    = "agents_curiosity",
+  label = "What are you curious about when it comes to AI agents in research?<br>*Questions, doubts and concerns are all welcome. I use the answers, without your GitHub username, to shape the day.*"
+)
+```
+
+--- agreement
+
+## Consent
+
+```{r}
+sd_question(
+  type   = "mc",
+  id     = "consent",
+  label  = "I agree that my answers are used to plan and run this workshop. Only the course instructor has access to them. They are stored in a database in Zurich (Supabase), the survey runs on Posit Connect Cloud, and they are shared with no one else. For reporting, my GitHub username is removed. The anonymised answers may be used to improve the workshop and in future research and publications about it.",
+  option = c("Yes" = "yes")
+)
+```
+
+--- end
+
+## Thank you
+
+Your answers are saved. Continue with Step 4 on the workshop website: [`r pre_work_url`](`r pre_work_url`)
+
+```{r}
+sd_close()
+```
